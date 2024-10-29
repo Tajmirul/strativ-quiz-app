@@ -16,7 +16,9 @@ const AnswerHistory = ({ history }: Props) => {
     return (
         <Accordion type="single" collapsible className="mt-4">
             <AccordionItem value="answer-history">
-                <AccordionTrigger>View Answer History</AccordionTrigger>
+                <AccordionTrigger className="text-sm">
+                    View Answer History
+                </AccordionTrigger>
                 <AccordionContent>
                     <ul className="space-y-2">
                         {history.map((answer, index) => (
