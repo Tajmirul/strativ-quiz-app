@@ -47,8 +47,6 @@ const QuestionCard = memo(
                 return;
             }
 
-            console.log({ option, checked });
-
             if (question.type === 'single') {
                 onChange(question.id, [option]);
             } else {

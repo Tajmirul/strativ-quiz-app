@@ -13,6 +13,7 @@ import { saveAnswer } from '@/store/features/answerSlice';
 import { calculateStatistics } from '@/lib/question';
 import { useQuestions } from '@/store/features/questionSlice';
 import { createId } from '@paralleldrive/cuid2';
+import { useCallback } from 'react';
 
 const initialValues: {
     answers: {
@@ -23,7 +24,6 @@ const initialValues: {
 };
 
 const validationSchema = object({
-    questions: array().min(1, 'No questions found'),
     answers: object().test(
         'answers-object',
         'At least answer one question',
@@ -80,15 +80,22 @@ const QuizPage = () => {
         },
     });
 
-    const handleAnswerChange = (
-        questionId: string,
-        selectedOptions: string[],
-    ) => {
-        const answers = formik.values.answers;
-        answers[questionId] = selectedOptions;
+    const handleAnswerChange = useCallback(
+        (questionId: string, selectedOptions: string[]) => {
+            // could not understand why this is not working
 
-        formik.setFieldValue('answers', answers);
-    };
+            // formik.setFieldValue('answers', {
+            //     ...formik.values.answers,
+            //     [questionId]: selectedOptions,
+            // });
+
+            const answers = formik.values.answers;
+            answers[questionId] = selectedOptions;
+
+            formik.setFieldValue('answers', answers);
+        },
+        [formik],
+    );
 
     return (
         <div className="container ">
