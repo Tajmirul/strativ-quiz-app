@@ -1,0 +1,30 @@
+{
+    "files.autoSave": "onFocusChange",
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "files.associations": {
+        "*.css": "tailwindcss"
+    },
+    "[prisma]": {
+        "editor.defaultFormatter": "Prisma.prisma"
+    },
+    "cSpell.words": [
+        "blocknote",
+        "donotreply",
+        "logtail",
+        "lucide",
+        "nextauth",
+        "openai",
+        "poppler",
+        "Roastable",
+        "roastables",
+        "shadcn",
+        "signin",
+        "signup",
+        "tailwindcss",
+        "tajmirul"
+    ],
+    "[dockerfile]": {
+        "editor.defaultFormatter": "ms-azuretools.vscode-docker"
+    }
+}
