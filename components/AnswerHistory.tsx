@@ -6,7 +6,7 @@ import {
     AccordionItem,
     AccordionTrigger,
 } from './ui/accordion';
-import { IAnswer, IAnswerItem } from '@/types';
+import { IAnswerItem } from '@/types';
 
 interface Props {
     history: IAnswerItem[];

@@ -1,4 +1,3 @@
-import AccessDenied from '@/components/AccessDenied';
 import Footer from '@/components/Footer';
 import Navbar from '@/components/Navbar';
 import { getCurrentUser } from '@/lib/next-auth';

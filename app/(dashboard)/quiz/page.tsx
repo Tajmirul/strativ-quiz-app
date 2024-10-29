@@ -2,19 +2,18 @@
 
 import { useRouter } from 'next/navigation';
 import { IAnswer, IAnswerItem } from '@/types';
-import QuestionCard from '@/components/QuestionCard';
+import QuestionCard from '@/components/question-card/QuestionCard';
 import toast from 'react-hot-toast';
 import { Button } from '@/components/ui/button';
 import { useFormik } from 'formik';
 import { array, object } from 'yup';
-import { useSession } from 'next-auth/react';
 import { StorageKey } from '@/lib/constants';
 import { useDispatch } from 'react-redux';
 import { saveAnswer } from '@/store/features/answerSlice';
 import { calculateStatistics } from '@/lib/question';
 import { useQuestions } from '@/store/features/questionSlice';
-import QuestionCardSkeleton from '@/components/skeleton/QuestionCardSkeleton';
-import cuid2, { createId } from '@paralleldrive/cuid2';
+import { createId } from '@paralleldrive/cuid2';
+import { useCallback } from 'react';
 
 const initialValues: {
     answers: {
@@ -25,7 +24,6 @@ const initialValues: {
 };
 
 const validationSchema = object({
-    questions: array().min(1, 'No questions found'),
     answers: object().test(
         'answers-object',
         'At least answer one question',
@@ -82,15 +80,22 @@ const QuizPage = () => {
         },
     });
 
-    const handleAnswerChange = (
-        questionId: string,
-        selectedOptions: string[],
-    ) => {
-        const answers = formik.values.answers;
-        answers[questionId] = selectedOptions;
+    const handleAnswerChange = useCallback(
+        (questionId: string, selectedOptions: string[]) => {
+            // could not understand why this is not working
 
-        formik.setFieldValue('answers', answers);
-    };
+            // formik.setFieldValue('answers', {
+            //     ...formik.values.answers,
+            //     [questionId]: selectedOptions,
+            // });
+
+            const answers = formik.values.answers;
+            answers[questionId] = selectedOptions;
+
+            formik.setFieldValue('answers', answers);
+        },
+        [formik],
+    );
 
     return (
         <div className="container ">

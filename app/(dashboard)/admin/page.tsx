@@ -1,6 +1,6 @@
 'use client';
-import QuestionCard from '@/components/QuestionCard';
-import QuestionForm from './components/QuestionForm';
+import QuestionCard from '@/components/question-card/QuestionCard';
+import QuestionForm from '../../../components/question-form/QuestionForm';
 import { Button } from '@/components/ui/button';
 import { initialQuestionData } from '@/lib/data';
 import { setQuestions, useQuestions } from '@/store/features/questionSlice';

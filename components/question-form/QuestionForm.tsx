@@ -1,14 +1,12 @@
 'use client';
 
-import { useEffect, useMemo } from 'react';
+import { useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
 import { IQuestion } from '@/types';
-import { MinusIcon, PlusIcon } from 'lucide-react';
-import { Checkbox } from '@/components/ui/checkbox';
 import { useFormik } from 'formik';
 import { array, object, string } from 'yup';
 import { getFormikProps } from '@/lib/formik';
@@ -16,6 +14,7 @@ import { cn } from '@/lib/utils';
 import toast from 'react-hot-toast';
 import { useDispatch } from 'react-redux';
 import { setQuestion, useQuestions } from '@/store/features/questionSlice';
+import OptionItem from '@/components/question-form/OptionItem';
 
 const initialValues: IQuestion = {
     id: '',
@@ -52,10 +51,7 @@ const QuestionForm = () => {
     const searchParams = useSearchParams();
     const { questions } = useQuestions();
 
-    const questionId = useMemo(
-        () => searchParams.get('questionId'),
-        [searchParams],
-    );
+    const questionId = searchParams.get('questionId');
 
     const formik = useFormik({
         initialValues,
@@ -81,7 +77,7 @@ const QuestionForm = () => {
                 }
 
                 helpers.resetForm();
-            } catch (error) {
+            } catch (_error) {
                 toast.error('Failed to add question');
             }
         },
@@ -117,18 +113,6 @@ const QuestionForm = () => {
 
         const newOptions = formik.values.options.filter((_, i) => i !== index);
         formik.setFieldValue('options', newOptions);
-    };
-
-    const markCorrectAnswer = (option: string) => {
-        if (formik.values.type === 'single') {
-            formik.setFieldValue('correctAnswers', [option]);
-        } else {
-            const correctAnswers = formik.values.correctAnswers.includes(option)
-                ? formik.values.correctAnswers.filter((a) => a !== option)
-                : [...formik.values.correctAnswers, option];
-
-            formik.setFieldValue('correctAnswers', correctAnswers);
-        }
     };
 
     const handleCancelEdit = () => {
@@ -177,55 +161,14 @@ const QuestionForm = () => {
                     </RadioGroup>
                 </div>
                 {formik.values.options.map((option, index) => (
-                    <div key={index} className="flex items-center space-x-2">
-                        {formik.values.type === 'single' ? (
-                            <RadioGroup
-                                value={formik.values.correctAnswers[0]}
-                                onValueChange={(value) =>
-                                    markCorrectAnswer(value)
-                                }
-                            >
-                                <RadioGroupItem
-                                    value={option}
-                                    id={`option-${index}`}
-                                />
-                            </RadioGroup>
-                        ) : (
-                            <Checkbox
-                                id={`option-${index}`}
-                                checked={formik.values.correctAnswers.includes(
-                                    option,
-                                )}
-                                onClick={() => markCorrectAnswer(option)}
-                            />
-                        )}
-                        <Input
-                            classNames={{
-                                container: 'grow',
-                            }}
-                            placeholder={`Option ${index + 1}`}
-                            {...getFormikProps(formik, `options.${index}`)}
-                        />
-                        <div className="flex gap-1">
-                            <Button
-                                type="button"
-                                variant={'outline'}
-                                size="icon"
-                                onClick={() => handleAddOption(index)}
-                            >
-                                <PlusIcon />
-                            </Button>
-                            <Button
-                                type="button"
-                                variant={'outline'}
-                                size="icon"
-                                className="text-destructive border-destructive"
-                                onClick={() => handleDeleteOption(index)}
-                            >
-                                <MinusIcon />
-                            </Button>
-                        </div>
-                    </div>
+                    <OptionItem
+                        formik={formik}
+                        key={index}
+                        index={index}
+                        option={option}
+                        handleAddOption={handleAddOption}
+                        handleDeleteOption={handleDeleteOption}
+                    />
                 ))}
                 {formik.touched.correctAnswers &&
                     formik.errors.correctAnswers && (
