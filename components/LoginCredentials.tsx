@@ -1,7 +1,7 @@
 import React from 'react';
 
 interface Props {
-    setData: (email: string, password: string) => void;
+    setData: (_email: string, _password: string) => void;
 }
 
 const credentials = [
