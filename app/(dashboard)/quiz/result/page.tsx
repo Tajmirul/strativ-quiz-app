@@ -11,17 +11,24 @@ import { Progress } from '@/components/ui/progress';
 import { StorageKey } from '@/lib/constants';
 import { IStatistics } from '@/types';
 import { redirect } from 'next/navigation';
-import { useMemo } from 'react';
+import { useEffect, useState } from 'react';
 
 const Page = () => {
-    const statistics = useMemo(() => {
-        const result = JSON.parse(
+    const [statistics, setStatistics] = useState<IStatistics | null>({
+        totalQuestions: 0,
+        score: 0,
+        correct: 0,
+        wrong: 0,
+    });
+
+    useEffect(() => {
+        const statistics = JSON.parse(
             localStorage.getItem(StorageKey.Statistics) || 'null',
         ) as IStatistics;
 
-        localStorage.removeItem(StorageKey.Statistics);
+        setStatistics(statistics);
 
-        return result;
+        localStorage.removeItem(StorageKey.Statistics);
     }, []);
 
     if (!statistics) {
