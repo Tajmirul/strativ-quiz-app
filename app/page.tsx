@@ -79,7 +79,7 @@ const SignIn = () => {
                         <Input
                             label="Email"
                             type="text"
-                            placeholder="email"
+                            placeholder="Email"
                             {...getFormikProps(formik, 'email')}
                         />
                         <Input
