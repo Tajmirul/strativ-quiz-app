@@ -16,8 +16,8 @@ const AdminPage = () => {
 
     return (
         <div className="container">
-            <div className="flex gap-5">
-                <div className="space-y-4 w-full max-w-[600px]">
+            <div className="flex max-sm:flex-col gap-x-5">
+                <div className="space-y-4 w-full max-w-[600px] max-sm:order-1 max-sm:border-t max-sm:pt-5">
                     <h1 className="text-xl font-semibold mb-4">Questions</h1>
 
                     {!questions.length ? (
