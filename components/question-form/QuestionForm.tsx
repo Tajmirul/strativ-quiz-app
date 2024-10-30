@@ -121,7 +121,7 @@ const QuestionForm = () => {
     };
 
     return (
-        <div className="mb-6 grow max-w-[400px]">
+        <div className="mb-5 grow max-w-[400px]">
             <div className="flex justify-between">
                 <h3 className="text-xl font-semibold">
                     {questionId ? 'Edit' : 'Add New'} Question
