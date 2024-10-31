@@ -1,17 +1,15 @@
 'use client';
 import QuestionCard from '@/components/question-card/QuestionCard';
-import QuestionForm from '../../../components/question-form/QuestionForm';
+import QuestionForm from '../../../../components/question-form/QuestionForm';
 import { Button } from '@/components/ui/button';
 import { initialQuestionData } from '@/lib/data';
-import { setQuestions, useQuestions } from '@/store/features/questionSlice';
-import { useDispatch } from 'react-redux';
+import { useQuestions } from '@/store/QuestionContext';
 
 const AdminPage = () => {
-    const dispatch = useDispatch();
-    const { questions } = useQuestions();
+    const { questions, setQuestions } = useQuestions();
 
     const handlePopulateQuestions = () => {
-        dispatch(setQuestions(initialQuestionData));
+        setQuestions(initialQuestionData);
     };
 
     return (

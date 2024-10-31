@@ -21,6 +21,7 @@ export interface IQuestion {
 
 export interface IAnswerItem {
     id: string;
+    userId: number;
     answer: string[];
     timestamp: string;
 }

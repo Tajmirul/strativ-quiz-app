@@ -10,7 +10,11 @@ const credentials = [
         password: 'Pa$$w0rd!',
     },
     {
-        email: 'user@gmail.com',
+        email: 'user1@gmail.com',
+        password: 'Pa$$w0rd!',
+    },
+    {
+        email: 'user2@gmail.com',
         password: 'Pa$$w0rd!',
     },
 ];

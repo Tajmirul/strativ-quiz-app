@@ -5,12 +5,12 @@ import { IAnswerItem, IQuestion } from '@/types';
 import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
 import { memo, useEffect, useState } from 'react';
-import { useAnswers } from '@/store/features/answerSlice';
-import { deleteQuestion } from '@/store/features/questionSlice';
-import { useDispatch } from 'react-redux';
 import QuestionCardActions from './QuestionCardActions';
 import AnswerHistory from '../AnswerHistory';
 import QuestionCardOption from './QuestionCardOption';
+import { useAnswers } from '@/store/AnswerContext';
+import { useQuestions } from '@/store/QuestionContext';
+import { useSession } from 'next-auth/react';
 
 interface Props {
     question: IQuestion;
@@ -31,16 +31,21 @@ const QuestionCard = memo(
         showAnswerHistory = false,
         onChange,
     }: Props) => {
+        const { data: session } = useSession();
         const { answers } = useAnswers();
-        const dispatch = useDispatch();
         const router = useRouter();
+        const { deleteQuestion } = useQuestions();
         const [answerHistory, setAnswersHistory] = useState<IAnswerItem[]>([]);
 
         useEffect(() => {
-            if (!showAnswerHistory) return;
+            if (!showAnswerHistory || !session?.user) return;
 
-            setAnswersHistory(answers[question.id] || []);
-        }, []);
+            const history = answers[question.id]?.filter(
+                (item) => item.userId === session.user.id,
+            );
+
+            setAnswersHistory(history || []);
+        }, [session?.user]);
 
         const handleOptionChange = (option: string, checked?: boolean) => {
             if (!onChange) {
@@ -74,10 +79,12 @@ const QuestionCard = memo(
                     {actionEnabled ? (
                         <QuestionCardActions
                             onEditQuestion={() => {
-                                router.push(`/admin?questionId=${question.id}`);
+                                router.push(
+                                    `/admin/questions?questionId=${question.id}`,
+                                );
                             }}
                             onDeleteQuestion={() => {
-                                dispatch(deleteQuestion(question.id));
+                                deleteQuestion(question.id);
                                 toast.success('Question deleted successfully');
                             }}
                         />
