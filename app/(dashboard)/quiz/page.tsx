@@ -6,14 +6,14 @@ import QuestionCard from '@/components/question-card/QuestionCard';
 import toast from 'react-hot-toast';
 import { Button } from '@/components/ui/button';
 import { useFormik } from 'formik';
-import { array, object } from 'yup';
+import { object } from 'yup';
 import { StorageKey } from '@/lib/constants';
-import { useDispatch } from 'react-redux';
-import { saveAnswer } from '@/store/features/answerSlice';
 import { calculateStatistics } from '@/lib/question';
-import { useQuestions } from '@/store/features/questionSlice';
 import { createId } from '@paralleldrive/cuid2';
 import { useCallback } from 'react';
+import { useQuestions } from '@/store/QuestionContext';
+import { useAnswers } from '@/store/AnswerContext';
+import { useSession } from 'next-auth/react';
 
 const initialValues: {
     answers: {
@@ -40,8 +40,9 @@ const validationSchema = object({
 
 const QuizPage = () => {
     const router = useRouter();
-    const dispatch = useDispatch();
+    const { data: session } = useSession();
     const { questions } = useQuestions();
+    const { saveAnswer } = useAnswers();
 
     const formik = useFormik({
         initialValues,
@@ -55,6 +56,7 @@ const QuizPage = () => {
 
                         const answerItems: IAnswerItem = {
                             id: createId(),
+                            userId: session!.user.id,
                             answer: selections,
                             timestamp: new Date().toJSON(),
                         };
@@ -63,7 +65,7 @@ const QuizPage = () => {
                     },
                 );
 
-                dispatch(saveAnswer(newAnswers));
+                saveAnswer(newAnswers);
 
                 const statistics = calculateStatistics(values.answers);
 
@@ -105,15 +107,22 @@ const QuizPage = () => {
                     onSubmit={formik.handleSubmit}
                     className="space-y-4 mb-10"
                 >
-                    {questions.map((question) => (
-                        <QuestionCard
-                            key={question.id}
-                            question={question}
-                            showAnswerHistory={true}
-                            selected={formik.values.answers[question.id]}
-                            onChange={handleAnswerChange}
-                        />
-                    ))}
+                    {!questions.length ? (
+                        <p className="text-muted-foreground">
+                            No questions available. Please add questions to
+                            start the quiz.
+                        </p>
+                    ) : (
+                        questions.map((question) => (
+                            <QuestionCard
+                                key={question.id}
+                                question={question}
+                                showAnswerHistory={true}
+                                selected={formik.values.answers[question.id]}
+                                onChange={handleAnswerChange}
+                            />
+                        ))
+                    )}
 
                     {formik.touched.answers && formik.errors.answers && (
                         <p className="text-rose-500 text-sm">

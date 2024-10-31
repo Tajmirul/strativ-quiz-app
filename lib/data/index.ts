@@ -41,15 +41,22 @@ export const initialQuestionData: IQuestion[] = [
 export const initialUserData: IUser[] = [
     {
         id: 1,
-        name: 'John Doe',
+        name: 'Admin',
         email: 'admin@gmail.com',
         password: 'Pa$$w0rd!',
         role: UserRole.Admin,
     },
     {
         id: 2,
-        name: 'Tajmirul',
-        email: 'user@gmail.com',
+        name: 'User 1',
+        email: 'user1@gmail.com',
+        password: 'Pa$$w0rd!',
+        role: UserRole.User,
+    },
+    {
+        id: 3,
+        name: 'User 3',
+        email: 'user2@gmail.com',
         password: 'Pa$$w0rd!',
         role: UserRole.User,
     },

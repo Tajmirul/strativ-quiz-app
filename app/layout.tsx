@@ -1,10 +1,9 @@
+import './globals.css';
 import type { Metadata } from 'next';
 import { Open_Sans } from 'next/font/google';
 import { Toaster } from 'react-hot-toast';
 import { NextAuthProvider } from '@/components/NextAuthProvider';
-import './globals.css';
-import ReduxProvider from '@/components/ReduxProvider';
-import ReduxInit from '@/components/ReduxInit';
+import ContextProvider from '@/store/ContextProvider';
 
 const openSans = Open_Sans({
     style: 'normal',
@@ -27,9 +26,7 @@ export default async function RootLayout({
         <html lang="en">
             <body className={`${openSans.variable} antialiased`}>
                 <NextAuthProvider>
-                    <ReduxProvider>
-                        <ReduxInit>{children}</ReduxInit>
-                    </ReduxProvider>
+                    <ContextProvider>{children}</ContextProvider>
                     <Toaster position="bottom-center" />
                 </NextAuthProvider>
             </body>

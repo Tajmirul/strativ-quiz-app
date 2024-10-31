@@ -49,7 +49,7 @@ const SignIn = () => {
             const updatedSession = await update();
 
             if (updatedSession?.user.role === UserRole.Admin) {
-                router.push('/admin');
+                router.push('/admin/questions');
                 return;
             }
 

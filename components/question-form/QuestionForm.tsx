@@ -12,9 +12,8 @@ import { array, object, string } from 'yup';
 import { getFormikProps } from '@/lib/formik';
 import { cn } from '@/lib/utils';
 import toast from 'react-hot-toast';
-import { useDispatch } from 'react-redux';
-import { setQuestion, useQuestions } from '@/store/features/questionSlice';
 import OptionItem from '@/components/question-form/OptionItem';
+import { useQuestions } from '@/store/QuestionContext';
 
 const initialValues: IQuestion = {
     id: '',
@@ -46,10 +45,9 @@ const validationSchema = object().shape({
 });
 
 const QuestionForm = () => {
-    const dispatch = useDispatch();
     const router = useRouter();
     const searchParams = useSearchParams();
-    const { questions } = useQuestions();
+    const { questions, setQuestion } = useQuestions();
 
     const questionId = searchParams.get('questionId');
 
@@ -69,11 +67,11 @@ const QuestionForm = () => {
                     values.options.includes(item),
                 );
 
-                dispatch(setQuestion({ ...values, correctAnswers }));
+                setQuestion({ ...values, correctAnswers });
                 toast.success('Successful');
 
                 if (questionId) {
-                    router.push('/admin');
+                    router.push('/admin/questions');
                 }
 
                 helpers.resetForm();
@@ -117,7 +115,7 @@ const QuestionForm = () => {
 
     const handleCancelEdit = () => {
         formik.resetForm();
-        router.replace('/admin');
+        router.replace('/admin/questions');
     };
 
     return (

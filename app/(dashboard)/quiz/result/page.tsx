@@ -28,7 +28,9 @@ const Page = () => {
 
         setStatistics(statistics);
 
-        localStorage.removeItem(StorageKey.Statistics);
+        return () => {
+            localStorage.removeItem(StorageKey.Statistics);
+        };
     }, []);
 
     if (!statistics) {
